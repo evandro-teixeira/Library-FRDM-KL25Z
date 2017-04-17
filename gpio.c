@@ -7,9 +7,73 @@
 
 #include "gpio.h"
 
-/********************************************************************/
+/****************************************************************************************/
 // função que define a direção do pino
-/********************************************************************/
+/****************************************************************************************/
+bool gpio_Init(GPIO_MemMapPtr gpio,uint8_t pin, uint8_t mode,bool pull_resistor)
+{
+	//gpio;
+	//PTA;
+	if(gpio == GPIOA)
+	{
+		SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
+		PORT_PCR_REG(PORTA_BASE_PTR,pin) = PORT_PCR_MUX(1);
+		if(pull_resistor == PULL_RESISTOR)
+		{
+			PORT_PCR_REG(PORTA_BASE_PTR,pin) |= PORT_PCR_PE(1);
+		}
+	}
+	else if (gpio == GPIOB)
+	{
+		SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
+		PORT_PCR_REG(PORTB_BASE_PTR,pin) = PORT_PCR_MUX(1);
+		if(pull_resistor == PULL_RESISTOR)
+		{
+			PORT_PCR_REG(PORTA_BASE_PTR,pin) |= PORT_PCR_PE(1);
+		}
+	}
+	else if (gpio == GPIOC)
+	{
+		SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
+		PORT_PCR_REG(PORTC_BASE_PTR,pin) = PORT_PCR_MUX(1);
+		if(pull_resistor == PULL_RESISTOR)
+		{
+			PORT_PCR_REG(PORTA_BASE_PTR,pin) |= PORT_PCR_PE(1);
+		}
+	}
+	else if (gpio == GPIOD)
+	{
+		SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+		PORT_PCR_REG(PORTD_BASE_PTR,pin) = PORT_PCR_MUX(1);
+		if(pull_resistor == PULL_RESISTOR)
+		{
+			PORT_PCR_REG(PORTA_BASE_PTR,pin) |= PORT_PCR_PE(1);
+		}
+	}
+	else if (gpio == GPIOE)
+	{
+		SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+		PORT_PCR_REG(PORTE_BASE_PTR,pin) = PORT_PCR_MUX(1);
+		if(pull_resistor == PULL_RESISTOR)
+		{
+			PORT_PCR_REG(PORTA_BASE_PTR,pin) |= PORT_PCR_PE(1);
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	if(mode == OUTPUT)
+	{
+		gpio->PDDR |= (1 << pin);
+	}
+	else
+	{
+		gpio->PDDR &=~ (1 << pin);
+	}
+}
+/*
 void gpio_direction(uint8_t port, uint8_t pin, uint8_t mode,bool pull_resistor)
 {
 	switch(port)
@@ -102,10 +166,22 @@ void gpio_direction(uint8_t port, uint8_t pin, uint8_t mode,bool pull_resistor)
 			}
 		break;
 	}
-}
-/********************************************************************/
+}*/
+/****************************************************************************************/
 // Função que set o pino 0 ou 1
-/********************************************************************/
+/****************************************************************************************/
+void gpio_Set(GPIO_MemMapPtr gpio,uint8_t pin, uint8_t value)
+{
+	if(value == HIGH) // HIGH
+	{
+		gpio->PSOR |= (1 << pin);
+	}
+	else // LOW
+	{
+		gpio->PDOR &=~ (1 << pin);
+	}
+}
+/*
 void gpio_set(uint8_t port, uint8_t pin, uint8_t value)
 {
 	switch(port)
@@ -166,9 +242,15 @@ void gpio_set(uint8_t port, uint8_t pin, uint8_t value)
 		break;
 	}
 }
-/********************************************************************/
+*/
+/****************************************************************************************/
 // função que inverte o valor do pino
-/********************************************************************/
+/****************************************************************************************/
+void gpio_Toggle(GPIO_MemMapPtr gpio,uint8_t pin)
+{
+	gpio->PTOR = (1 << pin);
+}
+/*
 void gpio_toggle(uint8_t port, uint8_t pin)
 {
 	switch(port)
@@ -193,76 +275,81 @@ void gpio_toggle(uint8_t port, uint8_t pin)
 			GPIOE_PTOR = (1 << pin);
 		break;
 	}
-}
-/********************************************************************/
+}*/
+/****************************************************************************************/
 // função que le o valor do pino
-/********************************************************************/
+/****************************************************************************************/
+uint8_t gpio_Read(GPIO_MemMapPtr gpio,uint8_t pin)
+{
+	return ( gpio->PDIR & (1 << pin) );
+}
+/*
 uint16_t gpio_read(uint8_t port, uint8_t pin)
 {
 	switch(port)
 	{
 		case PORT_A:
-			/*if ( GPIOA_PDIR & (1 << pin))
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}*/
+			//if ( GPIOA_PDIR & (1 << pin))
+			//{
+			//	return TRUE;
+			//}
+			//else
+			//{
+			//	return FALSE;
+			//}
 			return (GPIOA_PDIR & (1 << pin));
 		break;
 
 		case PORT_B:
-			/*if ( GPIOB_PDIR & (1 << pin))
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}*/
+			//if ( GPIOB_PDIR & (1 << pin))
+			//{
+			//	return TRUE;
+			//}
+			//else
+			//{
+			//	return FALSE;
+			//}
 			return (GPIOB_PDIR & (1 << pin));
 		break;
 
 		case PORT_C:
-			/*if ( GPIOC_PDIR &= (1 << pin))
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}
-			*/
+			//if ( GPIOC_PDIR &= (1 << pin))
+			//{
+			//	return TRUE;
+			//}
+			//else
+			//{
+			//	return FALSE;
+			//}
+			//
 			return (GPIOC_PDIR & (1 << pin));
 		break;
 
 		case PORT_D:
-			/*if ( GPIOD_PDIR & (1 << pin))
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}*/
+			//if ( GPIOD_PDIR & (1 << pin))
+			//{
+			//	return TRUE;
+			//}
+			//else
+			//{
+			//	return FALSE;
+			//}
 			return (GPIOD_PDIR & (1 << pin));
 		break;
 
 		case PORT_E:
-			/*if ( GPIOE_PDIR & (1 << pin))
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}*/
+			//if ( GPIOE_PDIR & (1 << pin))
+			//{
+			//	return TRUE;
+			//}
+			//else
+			//{
+			//	return FALSE;
+			//}
 			return ( GPIOE_PDIR & (1 << pin));
 		break;
 	}
-}
-/********************************************************************/
+}*/
+/****************************************************************************************/
 
 

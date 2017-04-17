@@ -6,8 +6,9 @@
 #ifndef SOURCES_SPI_H_
 #define SOURCES_SPI_H_
  
-#include "MKL25Z4.h"
-#include "stdbool.h"
+//#include "MKL25Z4.h"
+//#include "stdbool.h"
+#include "externs.h"
  
 #define SPI_0	0
 #define SPI_1	1
