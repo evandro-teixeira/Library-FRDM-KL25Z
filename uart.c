@@ -1,95 +1,170 @@
+/*
+ *
+ */
+
 #include "uart.h"
-
-//void InitUart0(void)
-void uart_init (UART_MemMapPtr uartch, int sysclk, int baud)
+/****************************************************************************************
+*
+*****************************************************************************************/
+void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 {
-	register unsigned int sbr;
-	unsigned char temp;
-	
-	//switch(uartch)
-	//{
-	//	case UART0_BASE_PTR:
-	if(uartch == (UART_MemMapPtr)UART0_BASE_PTR)
+	uint16_t divisor;
+	uint8_t temp;
+
+	if(uart == UART0)
 	{
-			/* Enable the SCI0_TXD function on the pin */
-			PORTA_PCR1 = PORT_PCR_MUX(0x2);
-			/* Enable the SCI0_RXD function on the pin */
-			PORTA_PCR2 = PORT_PCR_MUX(0x2);
-			/* Select the clock source for UART0 */
-			SIM_SOPT2 |= SIM_SOPT2_UART0SRC(1);
-			/* UART0 and UART1 are clocked from the core clock, but all other UARTs are
-			* clocked from the peripheral clock. So we have to determine which clock
-			* to send to the uart_init function.
-			*/
-			/* Enable the clock to the selected UART */
-			SIM_SCGC4 |= SIM_SCGC4_UART0_MASK;
-	}		
-	//	break;		
-	//	case UART1_BASE_PTR:
-	else if(uartch == (UART_MemMapPtr)UART1_BASE_PTR)	
-	{	
-			/* Enable the UART_TXD function on PTC4 */
-			PORTC_PCR4 = PORT_PCR_MUX(0x3); // UART1 is alt3 function for this pin
-			/* Enable the UART_RXD function on PTC3 */
-			PORTC_PCR3 = PORT_PCR_MUX(0x3); // UART1 is alt3 function for this pin
-			/* Select the clock source for UART1 */
-			//SIM_SOPT2 |= SIM_SOPT2_UART1SRC(1);
-			/* Enable the clock to the selected UART */
-			SIM_SCGC4 |= SIM_SCGC4_UART1_MASK;
-	}		
-	//	break;			
-	//	case UART2_BASE_PTR:
-	else if(uartch == (UART_MemMapPtr)UART2_BASE_PTR)
-	{
-			/* Enable the UART_TXD function on PTD3 */
-			PORTD_PCR3 = PORT_PCR_MUX(0x3); // UART2 is alt3 function for this pin
-			/* Enable the UART_RXD function on PTD2 */
-			PORTD_PCR2 = PORT_PCR_MUX(0x3); // UART2 is alt3 function for this pin	
-			/* Select the clock source for UART1 */
-			//SIM_SOPT2 |= SIM_SOPT2_UART2SRC(1);
-			/* Enable the clock to the selected UART */
-			SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
+	    SIM_SCGC4 |=  SIM_SCGC4_UART0_MASK;
+	    SIM_SOPT2 &= ~SIM_SOPT2_UART0SRC_MASK;
+	    SIM_SOPT2 |=  SIM_SOPT2_UART0SRC(1);
+	    divisor = (uint16_t)(SystemCoreClock / baud_rate ) / 16;
+
+		switch(alt)
+		{
+			case 0:
+				SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;	// Turn on clock to A module
+			    PORTA_PCR1 = PORT_PCR_MUX(2);		// Set PTA1 to mux 2 [RX]
+			    PORTA_PCR2 = PORT_PCR_MUX(2);		// Set PTA2 to mux 2 [TX]
+			break;
+
+			case 1:
+				SIM_SCGC5  |= SIM_SCGC5_PORTA_MASK;	// Turn on clock to A module
+			    PORTA_PCR14 = PORT_PCR_MUX(3);		// Set PTA14 to mux 3 [TX]
+			    PORTA_PCR15 = PORT_PCR_MUX(3);		// Set PTA15 to mux 3 [RX]
+			break;
+
+			case 2:
+				SIM_SCGC5  |= SIM_SCGC5_PORTB_MASK;	// Turn on clock to B module
+			    PORTB_PCR16 = PORT_PCR_MUX(3);		// Set PTA14 to mux 3 [RX]
+			    PORTB_PCR17 = PORT_PCR_MUX(3);		// Set PTA15 to mux 3 [TX]
+			break;
+
+			case 3:
+				SIM_SCGC5  |= SIM_SCGC5_PORTD_MASK;	// Turn on clock to D module
+			    PORTD_PCR6 = PORT_PCR_MUX(3);		// Set PTA14 to mux 3 [RX]
+			    PORTD_PCR7 = PORT_PCR_MUX(3);		// Set PTA15 to mux 3 [TX]
+			break;
+
+			case 4:
+				SIM_SCGC5  |= SIM_SCGC5_PORTE_MASK;	// Turn on clock to E module
+			    PORTE_PCR6 = PORT_PCR_MUX(3);		// Set PTA14 to mux 3 [RX]
+			    PORTE_PCR7 = PORT_PCR_MUX(3);		// Set PTA15 to mux 3 [TX]
+			break;
+
+			default:
+				return;
+			break;
+		}
 	}
-	//break;		
-	//}
-   /* Make sure that the transmitter and receiver are disabled while we
-	* change settings.
-	*/
-	UART_C2_REG(uartch) &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
+	else if(uart == UART1)
+	{
+	    SIM_SCGC4 |=  SIM_SCGC4_UART1_MASK;
 
-	/* Configure the UART for 8-bit mode, no parity */
-	UART_C1_REG(uartch) = 0;	/* We need all default settings, so entire register is cleared */
+	    if(baud_rate == 115200)
+	    	divisor = (uint16_t)(SystemCoreClock / 128 / baud_rate ) * 66; // 115200 -
+	    else
+	    	divisor = (uint16_t)( SystemCoreClock / (baud_rate * 32) );  // 32 9600
 
-	/* Calculate baud settings */
-	sbr = (unsigned int) ((sysclk*1000)/(baud * 16));
+		switch(alt)
+		{
+			case 0:
+				SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;	// Turn on clock to A module
+			    PORTA_PCR18 = PORT_PCR_MUX(3);		// Set PTA18 to mux 3 [RX]
+			    PORTA_PCR19 = PORT_PCR_MUX(3);		// Set PTA19 to mux 3 [TX]
+			break;
 
-	/* Save off the current value of the UARTx_BDH except for the SBR field */
-	temp = UART_BDH_REG(uartch) & ~(UART_BDH_SBR(0x1F));
+			case 1:
+				SIM_SCGC5  |= SIM_SCGC5_PORTC_MASK;	// Turn on clock to A module
+			    PORTC_PCR3 = PORT_PCR_MUX(3);		// Set PTC3 to mux 3 [RX]
+			    PORTC_PCR4 = PORT_PCR_MUX(3);		// Set PTC4 to mux 3 [TX]
+			break;
 
-	UART_BDH_REG(uartch) = temp |  UART_BDH_SBR(((sbr & 0x1F00) >> 8));
-	UART_BDL_REG(uartch) = (unsigned char)(sbr & UART_BDL_SBR_MASK);
+			case 2:
+				SIM_SCGC5  |= SIM_SCGC5_PORTE_MASK;	// Turn on clock to E module
+			    PORTE_PCR0 = PORT_PCR_MUX(3);		// Set PTE0 to mux 3 [TX]
+			    PORTE_PCR1 = PORT_PCR_MUX(3);		// Set PTE1 to mux 3 [RX]
+			break;
 
-	/* Enable receiver and transmitter */
-	UART_C2_REG(uartch) |= (UART_C2_TE_MASK | UART_C2_RE_MASK );
+			default:
+				return;
+			break;
+		}
+	}
+	else if(uart == UART2)
+	{
+	    SIM_SCGC4 |=  SIM_SCGC4_UART2_MASK;
+
+	    if(baud_rate == 115200)
+	    	divisor = (uint16_t)(SystemCoreClock / 128 / baud_rate ) * 66; // 115200 -
+	    else
+	    	divisor = (uint16_t)( SystemCoreClock / (baud_rate * 32) );  // 32 9600
+
+		switch(alt)
+		{
+			case 0:
+				SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;	// Turn on clock to A module
+			    PORTD_PCR2 = PORT_PCR_MUX(3);		// Set PTA18 to mux 3 [RX]
+			    PORTD_PCR3 = PORT_PCR_MUX(3);		// Set PTA19 to mux 3 [TX]
+			break;
+
+			case 1:
+				SIM_SCGC5  |= SIM_SCGC5_PORTD_MASK;	// Turn on clock to A module
+			    PORTD_PCR4 = PORT_PCR_MUX(3);		// Set PTC3 to mux 3 [RX]
+			    PORTD_PCR5 = PORT_PCR_MUX(3);		// Set PTC4 to mux 3 [TX]
+			break;
+
+			case 2:
+				SIM_SCGC5  |= SIM_SCGC5_PORTE_MASK;	// Turn on clock to E module
+			    PORTE_PCR22 = PORT_PCR_MUX(3);		// Set PTE0 to mux 3 [TX]
+			    PORTE_PCR23 = PORT_PCR_MUX(3);		// Set PTE1 to mux 3 [RX]
+			break;
+
+			default:
+				return;
+			break;
+		}
+	}
+	else
+	{
+		return;
+	}
+
+	//
+	uart->C2 &=~ (UART_C2_TE_MASK | UART_C2_RE_MASK);
+	uart->C1 = 0;
+
+	temp = uart->BDH & ~(UART_BDH_SBR(0x1F));
+	uart->BDH = ( temp |  UART_BDH_SBR(((divisor & 0x1F00) >> 8)) );
+	uart->BDL = (uint16_t)(divisor & UART_BDL_SBR_MASK);
+
+	uart->C2 |= (UART_C2_TE_MASK | UART_C2_RE_MASK);
 
 }
-
-
-void uart_putchar (UART_MemMapPtr channel, char ch)
+/****************************************************************************************
+*
+*****************************************************************************************/
+void uart_Put(UART_MemMapPtr uart, uint8_t c)
 {
-    /* Wait until space is available in the FIFO */
-    while(!(UART_S1_REG(channel) & UART_S1_TDRE_MASK));
-
-    /* Send the character */
-    UART_D_REG(channel) = (unsigned char)ch;
+	while((uart->S1 & UART0_S1_TDRE_MASK) != UART0_S1_TDRE_MASK);
+	uart->D = c;
 }
-
-
-char uart_getchar (UART_MemMapPtr channel)
+/****************************************************************************************
+*
+*****************************************************************************************/
+uint8_t uart_Get(UART_MemMapPtr uart)
 {
-    /* Wait until character has been received */
-    while (!(UART_S1_REG(channel) & UART_S1_RDRF_MASK));
-
-    /* Return the 8-bit data from the receiver */
-    return UART_D_REG(channel);
+	//while(!(UART0_S1 & 0x20));
+	while((uart->S1 & UART0_S1_TDRE_MASK) != UART0_S1_TDRE_MASK);
+	return uart->D;
 }
+/****************************************************************************************
+*
+*****************************************************************************************/
+void uart_String(UART_MemMapPtr uart,char* txt )
+{
+	while(*txt)
+	{
+		uart_Put(uart,*txt);
+		txt++;
+	}
+}
+/***************************************************************************************/

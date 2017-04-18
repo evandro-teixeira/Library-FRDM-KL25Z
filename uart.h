@@ -10,13 +10,12 @@
 
 #include "externs.h"    
 
-#define POLLING_MODE 	1  
-#define UART_MODE 		POLLING_MODE  
 #define UART_BAUD       115200
-#define CORE_CLK_KHZ    48000
+#define UART_BAUD_1     9600
 
-void uart_init (UART_MemMapPtr uartch, int sysclk, int baud);
-void uart_putchar (UART_MemMapPtr channel, char ch);
-char uart_getchar (UART_MemMapPtr channel); 
+void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate);
+void uart_Put(UART_MemMapPtr uart, uint8_t c);
+void uart_String(UART_MemMapPtr uart,char* txt );
+uint8_t uart_Get(UART_MemMapPtr uart);
 
 #endif /* UART_H_ */
