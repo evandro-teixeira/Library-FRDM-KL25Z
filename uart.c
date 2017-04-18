@@ -6,7 +6,7 @@
 /****************************************************************************************
 *
 *****************************************************************************************/
-void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
+bool uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 {
 	uint16_t divisor;
 	uint8_t temp;
@@ -51,7 +51,7 @@ void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 			break;
 
 			default:
-				return;
+				return false;
 			break;
 		}
 	}
@@ -60,9 +60,9 @@ void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 	    SIM_SCGC4 |=  SIM_SCGC4_UART1_MASK;
 
 	    if(baud_rate == 115200)
-	    	divisor = (uint16_t)(SystemCoreClock / 128 / baud_rate ) * 66; // 115200 -
+	    	divisor = (uint16_t)(SystemCoreClock / 128 / baud_rate ) * 66; // 115200
 	    else
-	    	divisor = (uint16_t)( SystemCoreClock / (baud_rate * 32) );  // 32 9600
+	    	divisor = (uint16_t)( SystemCoreClock / (baud_rate * 32) );  // 9600
 
 		switch(alt)
 		{
@@ -85,7 +85,7 @@ void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 			break;
 
 			default:
-				return;
+				return false;
 			break;
 		}
 	}
@@ -94,9 +94,9 @@ void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 	    SIM_SCGC4 |=  SIM_SCGC4_UART2_MASK;
 
 	    if(baud_rate == 115200)
-	    	divisor = (uint16_t)(SystemCoreClock / 128 / baud_rate ) * 66; // 115200 -
+	    	divisor = (uint16_t)(SystemCoreClock / 128 / baud_rate ) * 66; // 115200
 	    else
-	    	divisor = (uint16_t)( SystemCoreClock / (baud_rate * 32) );  // 32 9600
+	    	divisor = (uint16_t)( SystemCoreClock / (baud_rate * 32) );  // 9600
 
 		switch(alt)
 		{
@@ -119,13 +119,13 @@ void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 			break;
 
 			default:
-				return;
+				return false;
 			break;
 		}
 	}
 	else
 	{
-		return;
+		return false;
 	}
 
 	//
@@ -138,6 +138,7 @@ void uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 
 	uart->C2 |= (UART_C2_TE_MASK | UART_C2_RE_MASK);
 
+	return true;
 }
 /****************************************************************************************
 *
