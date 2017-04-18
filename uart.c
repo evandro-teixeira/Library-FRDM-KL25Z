@@ -1,6 +1,9 @@
 /*
- *
- */
+* uart.c
+*
+*  Created on: Jul 20, 2016
+*      Author: PDI
+*/
 
 #include "uart.h"
 /****************************************************************************************
@@ -11,7 +14,7 @@ bool uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 	uint16_t divisor;
 	uint8_t temp;
 
-	if(uart == UART0)
+	if(uart == (UART_MemMapPtr)UART0)
 	{
 	    SIM_SCGC4 |=  SIM_SCGC4_UART0_MASK;
 	    SIM_SOPT2 &= ~SIM_SOPT2_UART0SRC_MASK;
@@ -55,7 +58,7 @@ bool uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 			break;
 		}
 	}
-	else if(uart == UART1)
+	else if(uart == (UART_MemMapPtr)UART1)
 	{
 	    SIM_SCGC4 |=  SIM_SCGC4_UART1_MASK;
 
@@ -89,7 +92,7 @@ bool uart_Init(UART_MemMapPtr uart, uint8_t alt, uint32_t baud_rate)
 			break;
 		}
 	}
-	else if(uart == UART2)
+	else if(uart == (UART_MemMapPtr)UART2)
 	{
 	    SIM_SCGC4 |=  SIM_SCGC4_UART2_MASK;
 
