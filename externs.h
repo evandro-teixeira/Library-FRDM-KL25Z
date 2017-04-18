@@ -16,7 +16,7 @@
 #include "adc.h"
 #include "spi.h"
 #include "i2c.h"
-
+#include "pwm.h"
 //extern uint16_t iClock;
 
 #endif /* EXTERNS_H_ */
