@@ -72,6 +72,10 @@ bool pit_GetFlag_Isr(bool ch)
 {
 	return pitIsrFlag[ch];
 }
+void pit_ClearFlag_Isr(bool ch)
+{
+	 pitIsrFlag[ch] = false;
+}
 #else if (MODEISRTPM == COUNTER_TPM)
 void pit_ClearCounter_Isr(bool ch)
 {
