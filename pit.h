@@ -26,7 +26,7 @@ void pit_Start(bool ch);
 void pit_Stop(bool ch);
 
 #if (MODEISRTPM == FLAG_TPM)
-	bool pit_GetFlag_Ist(bool ch);
+	bool pit_GetFlag_Isr(bool ch);
 #else if (MODEISRTPM == COUNTER_TPM)
 	void pit_ClearCounter_Isr(bool ch);
 	uint64_t pit_GetCounter_Isr(bool ch);

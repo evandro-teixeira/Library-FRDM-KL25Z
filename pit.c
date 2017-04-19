@@ -24,14 +24,14 @@ bool pit_Init(uint32_t value,bool ch)
 	//PIT_MCR;
 	//PIT_TCTRL0;
 
-	// Enable PIT clock
-	SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
-
-	// Turn on PIT
-	PIT_MCR = 0;
-
 	if(ch >= 2)
 	{
+		// Enable PIT clock
+		SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
+
+		// Turn on PIT
+		PIT_MCR = 0;
+
 		// Configure PIT to produce an interrupt every 1s
 		//PIT_LDVAL0 = value;
 		PIT_LDVAL_REG(PIT,ch) = value;
@@ -68,7 +68,7 @@ void pit_Stop(bool ch)
 *
 *****************************************************************************************/
 #if (MODEISRTPM == FLAG_TPM)
-bool pit_GetFlag_Ist(bool ch)
+bool pit_GetFlag_Isr(bool ch)
 {
 	return pitIsrFlag[ch]
 }
