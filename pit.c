@@ -70,7 +70,7 @@ void pit_Stop(bool ch)
 #if (MODEISRTPM == FLAG_TPM)
 bool pit_GetFlag_Isr(bool ch)
 {
-	return pitIsrFlag[ch]
+	return pitIsrFlag[ch];
 }
 #else if (MODEISRTPM == COUNTER_TPM)
 void pit_ClearCounter_Isr(bool ch)
