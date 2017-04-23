@@ -11,6 +11,8 @@
 #include "externs.h"
 #include "stdbool.h"
 
+// TPM clock source select
+// Selects the clock source for the TPM counter clock
 #define TPM_CLK_DIS     0	// Clock disabled
 #define TPM_PLLFLL 		1	// MCGFLLCLK clock or MCGPLLCLK/2 clock
 #define TPM_OSCERCLK 	2	// OSCERCLK clock
@@ -43,7 +45,8 @@
 /* */
 
 bool pwm_tpm_Init(TPM_MemMapPtr tpm, uint16_t  clk, uint16_t module, uint8_t clock_mode,uint8_t ps, bool counting_mode);
-void pwm_tpm_Ch_Init(TPM_MemMapPtr tpm, uint16_t channel, uint8_t mode);
+//void pwm_tpm_Ch_Init(TPM_MemMapPtr tpm, uint16_t channel, uint8_t mode);
+bool pwm_tpm_Ch_Init(TPM_MemMapPtr tpm, uint16_t channel, uint8_t mode,GPIO_MemMapPtr gpio,uint8_t pin);
 void pwm_tpm_CnV(TPM_MemMapPtr TPMx, uint16_t channel, uint16_t value);
 
 #endif /* SOURCES_PWM_H_ */
