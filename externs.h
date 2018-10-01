@@ -18,6 +18,7 @@
 #include "i2c.h"
 #include "pwm.h"
 #include "dac.h"
+#include "wdog.h"
 //extern uint16_t iClock;
 
 #endif /* EXTERNS_H_ */
