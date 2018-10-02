@@ -8,9 +8,9 @@
 
 void wdog_Init(COPC_config_t *config)
 {
-	SIM_COPC = (SIM_COPC_COPW(config->timeout)) |
-			   (SIM_COPC_COPCLKS(config->clock_select)) |
-			   (SIM_COPC_COPT(config->windowsed_mode));
+	SIM->COPC = (SIM_COPC_COPW(config->windowsed_mode))  | 		// COP windowed mode
+			    (SIM_COPC_COPCLKS(config->clock_select)) | 	// COP Clock Select
+			    (SIM_COPC_COPT(config->timeout));		// COP Watchdog Timeout
 }
 
 void wdog_Denit(void)
