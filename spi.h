@@ -8,7 +8,7 @@
  
 //#include "MKL25Z4.h"
 //#include "stdbool.h"
-#include "externs.h"
+#include "../Drivers/externs.h"
  
 //#define SPI_0	0
 //#define SPI_1	1

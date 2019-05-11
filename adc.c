@@ -5,7 +5,7 @@
  *      Author: Evandro
  */
 
-#include "adc.h"
+#include "../Drivers/adc.h"
 
 void adc_init(uint8_t res)
 {

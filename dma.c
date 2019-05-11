@@ -4,7 +4,7 @@
  *  Created on: 13/02/2018
  *      Author: evandro
  */
-#include "dma.h"
+#include "../Drivers/dma.h"
 /****************************************************************************************
 *
 *****************************************************************************************/
@@ -52,7 +52,7 @@ void dma_init(dma_config_t config)
 
 	dma_number_byte[config.channel]    = (uint8_t)config.number_byte;
 
-	number = (uint8_t)config.number_byte;
+//	number = (uint8_t)config.number_byte;
 }
 /****************************************************************************************
 *

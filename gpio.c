@@ -5,10 +5,10 @@
  *      Author: Evandro
  */
 
-#include "gpio.h"
+#include "../Drivers/gpio.h"
 
 /****************************************************************************************/
-// função que define a direção do pino
+// funï¿½ï¿½o que define a direï¿½ï¿½o do pino
 /****************************************************************************************/
 bool gpio_Init(GPIO_MemMapPtr gpio,uint8_t pin, uint8_t mode,bool pull_resistor)
 {
@@ -168,7 +168,7 @@ void gpio_direction(uint8_t port, uint8_t pin, uint8_t mode,bool pull_resistor)
 	}
 }*/
 /****************************************************************************************/
-// Função que set o pino 0 ou 1
+// Funï¿½ï¿½o que set o pino 0 ou 1
 /****************************************************************************************/
 void gpio_Set(GPIO_MemMapPtr gpio,uint8_t pin, uint8_t value)
 {
@@ -244,7 +244,7 @@ void gpio_set(uint8_t port, uint8_t pin, uint8_t value)
 }
 */
 /****************************************************************************************/
-// função que inverte o valor do pino
+// funï¿½ï¿½o que inverte o valor do pino
 /****************************************************************************************/
 void gpio_Toggle(GPIO_MemMapPtr gpio,uint8_t pin)
 {
@@ -277,7 +277,7 @@ void gpio_toggle(uint8_t port, uint8_t pin)
 	}
 }*/
 /****************************************************************************************/
-// função que le o valor do pino
+// funï¿½ï¿½o que le o valor do pino
 /****************************************************************************************/
 uint8_t gpio_Read(GPIO_MemMapPtr gpio,uint8_t pin)
 {

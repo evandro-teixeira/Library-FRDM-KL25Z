@@ -8,8 +8,8 @@
 #ifndef SOURCES_PWM_H_
 #define SOURCES_PWM_H_
 
-#include "externs.h"
 #include "stdbool.h"
+#include "../Drivers/externs.h"
 
 // TPM clock source select
 // Selects the clock source for the TPM counter clock

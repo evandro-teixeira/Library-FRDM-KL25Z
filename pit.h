@@ -8,7 +8,7 @@
 #ifndef SOURCES_PIT_H_
 #define SOURCES_PIT_H_
 
-#include "externs.h"
+#include "../Drivers/externs.h"
 //#include "stdbool.h"
 
 #define PIT_CH_0    0
@@ -25,14 +25,16 @@ bool pit_Init(uint32_t value,bool ch);
 void pit_Start(bool ch);
 void pit_Stop(bool ch);
 
-#if (MODEISRTPM == FLAG_TPM)
-	bool pit_GetFlag_Isr(bool ch);
-	void pit_ClearFlag_Isr(bool ch);
-#else if (MODEISRTPM == COUNTER_TPM)
-	void pit_ClearCounter_Isr(bool ch);
-	uint64_t pit_GetCounter_Isr(bool ch);
+void pit_Add_Callback( void(*task)(uint8_t ch) );
+
+//#if (MODEISRTPM == FLAG_TPM)
+//	bool pit_GetFlag_Isr(bool ch);
+//	void pit_ClearFlag_Isr(bool ch);
+//#else if (MODEISRTPM == COUNTER_TPM)
+//	void pit_ClearCounter_Isr(bool ch);
+//	uint64_t pit_GetCounter_Isr(bool ch);
 //#else
 // NC
-#endif
+//#endif
 
 #endif /* SOURCES_PIT_H_ */

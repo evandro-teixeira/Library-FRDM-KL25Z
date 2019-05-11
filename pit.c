@@ -5,26 +5,23 @@
  *      Author: Evandro
  */
 
-#include "pit.h"
+#include "../Drivers/pit.h"
 
 /*****************************************************************************************
 * Global Variable
 *****************************************************************************************/
-#if (MODEISRTPM == FLAG_TPM)
-	static bool pitIsrFlag[2] = {false};
-#else if (MODEISRTPM == COUNTER_TPM)
-	static uint64_t tpm_i[2] = {0};
-#endif
-
+//#if (MODEISRTPM == FLAG_TPM)
+//	static bool pitIsrFlag[2] = {false};
+//#else if (MODEISRTPM == COUNTER_TPM)
+//	static uint64_t tpm_i[2] = {0};
+//#endif
+void (*pit_task_callback)(uint8_t ch);
 /*****************************************************************************************
 *
 *****************************************************************************************/
 bool pit_Init(uint32_t value,bool ch)
 {
-	//PIT_MCR;
-	//PIT_TCTRL0;
-
-	if(ch >= 2)
+	if(ch < 2)
 	{
 		// Enable PIT clock
 		SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
@@ -39,8 +36,10 @@ bool pit_Init(uint32_t value,bool ch)
 		// Enable interrupt and enable timer
 		//PIT_TCTRL0 |= PIT_TCTRL_TIE_MASK | PIT_TCTRL_TEN_MASK;
 		PIT_TCTRL_REG(PIT,ch) |= PIT_TCTRL_TIE_MASK | PIT_TCTRL_TEN_MASK;
-
+		//PIT_TCTRL_REG(PIT,ch) |= PIT_TCTRL_TIE_MASK;
 		// Enable External Interrupt
+
+		PIT_TCTRL_REG(PIT,ch) &= ~PIT_TCTRL_TEN_MASK;
 		NVIC_EnableIRQ(PIT_IRQn);
 
 		return true;
@@ -67,28 +66,38 @@ void pit_Stop(bool ch)
 /*****************************************************************************************
 *
 *****************************************************************************************/
-#if (MODEISRTPM == FLAG_TPM)
-bool pit_GetFlag_Isr(bool ch)
-{
-	return pitIsrFlag[ch];
-}
-void pit_ClearFlag_Isr(bool ch)
-{
-	 pitIsrFlag[ch] = false;
-}
-#else if (MODEISRTPM == COUNTER_TPM)
-void pit_ClearCounter_Isr(bool ch)
-{
-	tpm_i[ch] = 0;
-}
+//#if (MODEISRTPM == FLAG_TPM)
+//bool pit_GetFlag_Isr(bool ch)
+//{
+//	return pitIsrFlag[ch];
+//}
+//void pit_ClearFlag_Isr(bool ch)
+//{
+//	 pitIsrFlag[ch] = false;
+//}
+//#else if (MODEISRTPM == COUNTER_TPM)
+//void pit_ClearCounter_Isr(bool ch)
+//{
+//	tpm_i[ch] = 0;
+//}
 /*****************************************************************************************
 *
 *****************************************************************************************/
-uint64_t pit_GetCounter_Isr(bool ch)
+//uint64_t pit_GetCounter_Isr(bool ch)
+//{
+//	return tpm_i[ch];
+//}
+//#endif
+/*****************************************************************************************
+*
+*****************************************************************************************/
+void pit_Add_Callback( void (*task)(uint8_t ch) )
 {
-	return tpm_i[ch];
+	if(task != NULL)
+	{
+		pit_task_callback = task;
+	}
 }
-#endif
 /*****************************************************************************************
 * Handles PIT interrupt if enabled
 *****************************************************************************************/
@@ -100,20 +109,22 @@ void PIT_IRQHandler(void)
 	{
 		if( PIT_TFLG_REG(PIT,index) )
 		{
-			// Clear interrupt
-			//PIT_TFLG0 = PIT_TFLG_TIF_MASK;
-			PIT_TFLG_REG(PIT,index) = PIT_TFLG_TIF_MASK;
-#if (MODEISRTPM == FLAG_TPM)
-			pitIsrFlag[index] = true;
-#else if (MODEISRTPM == COUNTER_TPM)
-			tpm_i[index] += 1;
-#endif
-			//if(index)
-				// Toggle Green LED Green
-				//GPIOB_PTOR = (1 << 19);
-			//else
-				// Toggle Green LED Red
-				//GPIOB_PTOR = (1 << 18);
+			PIT_TFLG_REG(PIT,index) = PIT_TFLG_TIF_MASK; // Clear interrupt
+			if(pit_task_callback != NULL)
+			{
+				pit_task_callback(index);
+			}
+//#if (MODEISRTPM == FLAG_TPM)
+//			pitIsrFlag[index] = true;
+//#else if (MODEISRTPM == COUNTER_TPM)
+//			tpm_i[index] += 1;
+//#endif
+//			//if(index)
+//				// Toggle Green LED Green
+//				//GPIOB_PTOR = (1 << 19);
+//			//else
+//				// Toggle Green LED Red
+//				//GPIOB_PTOR = (1 << 18);
 		}
 	}
 }
