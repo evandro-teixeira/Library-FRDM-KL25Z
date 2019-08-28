@@ -8,7 +8,7 @@
 #ifndef SOURCES_DAC_H_
 #define SOURCES_DAC_H_
 
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
 //#include "MKL25Z4.h"
 //#include "stdbool.h"
 

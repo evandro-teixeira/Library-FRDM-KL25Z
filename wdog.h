@@ -8,7 +8,7 @@
 #ifndef WDOG_H_
 #define WDOG_H_
 
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
 
 // COP Watchdog Timeout
 // These write-once bits select the timeout period of the COP.

@@ -8,7 +8,7 @@
 #ifndef SOURCES_PIT_H_
 #define SOURCES_PIT_H_
 
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
 //#include "stdbool.h"
 
 #define PIT_CH_0    0

@@ -8,7 +8,7 @@
 #ifndef EXTERNS_H_
 #define EXTERNS_H_
 
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
 
 #include <MKL25Z4.h>    /* I/O map for MKL25Z128VLK4 */
 #include "stdbool.h"
