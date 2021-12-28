@@ -8,7 +8,7 @@
  
 //#include "MKL25Z4.h"
 //#include "stdbool.h"
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
  
 //#define SPI_0	0
 //#define SPI_1	1

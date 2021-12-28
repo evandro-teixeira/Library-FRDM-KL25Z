@@ -5,7 +5,7 @@
  *      Author: Evandro
  */
 
-#include "../Drivers/pwm.h"
+#include "../Library-FRDM-KL25Z/pwm.h"
 
 bool pwm_tpm_Init(TPM_MemMapPtr tpm, uint16_t  clk, uint16_t module, uint8_t clock_mode,uint8_t ps, bool counting_mode)
 {

@@ -8,21 +8,21 @@
 #ifndef EXTERNS_H_
 #define EXTERNS_H_
 
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
 
 #include <MKL25Z4.h>    /* I/O map for MKL25Z128VLK4 */
 #include "stdbool.h"
 #include <stdio.h>
 
-#include "../Drivers/dac.h"
-#include "../Drivers/gpio.h"
-#include "../Drivers/i2c.h"
-#include "../Drivers/pit.h"
-#include "../Drivers/pwm.h"
-#include "../Drivers/spi.h"
-#include "../Drivers/uart.h"
-#include "../Drivers/wdog.h"
-#include "../Drivers/adc.h"
+#include "../Library-FRDM-KL25Z/adc.h"
+#include "../Library-FRDM-KL25Z/dac.h"
+#include "../Library-FRDM-KL25Z/gpio.h"
+#include "../Library-FRDM-KL25Z/i2c.h"
+#include "../Library-FRDM-KL25Z/pit.h"
+#include "../Library-FRDM-KL25Z/pwm.h"
+#include "../Library-FRDM-KL25Z/spi.h"
+#include "../Library-FRDM-KL25Z/uart.h"
+#include "../Library-FRDM-KL25Z/wdog.h"
 //extern uint16_t iClock;
 
 #endif /* EXTERNS_H_ */

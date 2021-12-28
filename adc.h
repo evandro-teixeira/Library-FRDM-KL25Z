@@ -9,7 +9,7 @@
 #define SOURCES_ADC_H_
 
 //#include "MKL25Z4.h"
-#include "../Drivers/externs.h"
+#include "../Library-FRDM-KL25Z/externs.h"
 
 #define ADC_0	0	//	PTE20
 #define ADC_1	4	//  PTE21
