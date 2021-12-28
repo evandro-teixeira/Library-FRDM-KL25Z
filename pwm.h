@@ -9,7 +9,7 @@
 #define SOURCES_PWM_H_
 
 #include "stdbool.h"
-#include "../Library-FRDM-KL25Z/externs.h"
+#include "../Drivers/externs.h"
 
 // TPM clock source select
 // Selects the clock source for the TPM counter clock

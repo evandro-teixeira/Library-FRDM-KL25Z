@@ -18,7 +18,7 @@ typedef unsigned char bool;
 #endif
 */
 
-#include "../Library-FRDM-KL25Z/externs.h"
+#include "../Drivers/externs.h"
 /*
 #define PORT_A 	0
 #define PORT_B 	1

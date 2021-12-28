@@ -4,7 +4,7 @@
  *  Created on: 14/04/2017
  *      Author: evandro
  */
-#include "../Library-FRDM-KL25Z/i2c.h"
+#include "../Drivers/i2c.h"
 
 /****************************************************************************************
 *

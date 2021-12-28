@@ -4,7 +4,7 @@
  *  Created on: set 30, 2018
  *      Author: Evandro Teixeira
  */
-#include "../Library-FRDM-KL25Z/wdog.h"
+#include "../Drivers/wdog.h"
 
 void wdog_Init(COPC_config_t *config)
 {

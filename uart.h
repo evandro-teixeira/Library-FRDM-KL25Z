@@ -8,7 +8,7 @@
 #ifndef UART_H_
 #define UART_H_
 
-#include "../Library-FRDM-KL25Z/externs.h"
+#include "../Drivers/externs.h"
 
 #define UART_BAUD       115200
 #define UART_BAUD_1     9600

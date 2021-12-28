@@ -5,7 +5,7 @@
  *      Author: Evandro
  */
 
-#include "../Library-FRDM-KL25Z/adc.h"
+#include "../Drivers/adc.h"
 
 void adc_init(uint8_t res)
 {

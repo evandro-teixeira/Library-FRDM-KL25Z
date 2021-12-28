@@ -5,7 +5,7 @@
  *      Author: Evandro
  */
 
-#include "../Library-FRDM-KL25Z/gpio.h"
+#include "../Drivers/gpio.h"
 
 /****************************************************************************************/
 // fun��o que define a dire��o do pino
